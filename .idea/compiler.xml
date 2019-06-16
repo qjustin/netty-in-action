@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="netty-in-action" />
+        <module name="nia" />
       </profile>
     </annotationProcessing>
   </component>
