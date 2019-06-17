@@ -2,6 +2,7 @@ package com.network.netty.chapter04.demo03;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -26,6 +27,13 @@ public class Server {
                         }
                     });
             ChannelFuture future = b.bind().sync();
+            Channel channel = future.channel();
+            Runnable writer = new Runnable() {
+                @Override
+                public void run() {
+                    channel.pipeline().writeAndFlush(Unpooled.copiedBuffer("hello\r\n", CharsetUtil.UTF_8));
+                }
+            };
             future.channel().closeFuture().sync();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

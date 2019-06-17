@@ -19,11 +19,12 @@ import io.netty.util.CharsetUtil;
  * 7. 编码和解密以及默认实现Handler, SimpleChannleInboutnHandler<T>
  * 8. Bootstrap & ServerBootstrap  引导类为网络成配置提供了容器 以及区别。
  * 9. 为什么ServerBootstrap需要两个EventLoopGroup
+ * 10. ServerBootStrap EventLoopGroup EventLoop Channel ChannelPipeline ChannelHandler 之间的关系
  */
 
 public class Server {
     /**
-     * 三大顶层接口
+     * 三大顶层接口WA
      *
      * Channel（连接）：Channel相当于Socket，它降低了创建Socket的复杂性；
      * EventLoop（执行）：控制流，并发，执行业务逻辑线程

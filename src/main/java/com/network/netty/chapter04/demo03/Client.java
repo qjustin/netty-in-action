@@ -21,9 +21,8 @@ public class Client {
                         protected void initChannel(Channel channel) throws Exception {
                             channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                                 @Override
-                                public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                    System.out.println(msg.toString());
-                                    ctx.writeAndFlush(Unpooled.copiedBuffer("received!", CharsetUtil.UTF_8));
+                                public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                    ctx.writeAndFlush(Unpooled.copiedBuffer("client request!", CharsetUtil.UTF_8));
                                 }
                             });
                         }

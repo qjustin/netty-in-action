@@ -1,15 +1,17 @@
 package com.network.netty.chapter00.test04;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.GlobalEventExecutor;
 
 public class Server {
 
     public static void main(String[] args) {
+        DefaultChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
         ServerBootstrap bootstrap = new ServerBootstrap();
         EventLoopGroup group = new NioEventLoopGroup();
 
@@ -21,7 +23,9 @@ public class Server {
                     .childHandler(new ChannelInitializer<Channel>() {
                         @Override
                         protected void initChannel(Channel channel) throws Exception {
+                            channel.pipeline().addLast(new ChannelOutboundHandlerAdapter(){
 
+                            });
                         }
                     });
         } catch (Exception ex) {
