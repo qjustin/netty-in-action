@@ -6,6 +6,15 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+/**
+ * 知识点
+ * 1. 缓冲区类型（再哪里分配内存）
+ * 2. 缓冲区管理 （操作API）
+ *          访问，读写，派生缓冲区（切片，duplicate）
+ * 3. 缓冲区池化与非池化
+ *          ByteBufAllocator接口 的两种实现，与Unpooled
+ * 4. 引用计数
+ */
 public class Server {
     public static void main(String[] args) {
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -22,12 +31,7 @@ public class Server {
                             channel.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
                                 @Override
                                 protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-                                    // 堆缓冲区的用法
-                                    // 使用场景：数据需要处理，
-                                    // 优点：分配，释放比较轻量
-                                    // 缺点：无法避免上下文切换，与拷贝次数 内核态用户态拷贝次数
 
-                                    // 检查是否有一个支撑数组, hasArray返回false时，尝试访问出发UnsupportedOperationException
                                     if (byteBuf.hasArray()) {
                                         // 获取对数组的引用
                                         byte[] array = byteBuf.array();
