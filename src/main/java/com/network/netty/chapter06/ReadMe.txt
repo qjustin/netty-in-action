@@ -13,6 +13,8 @@ ChannelHandler：
 
 ChannelPipeline
 
+每个Channel有且只有一个与其关联的私有ChannelPipeline。
+
 6. Netty 总是 从左边入站（头）从右边出站（尾）
    （头） inbound1 -> inbound2 -> outbound3 -> inbound4 -> outbund5（尾）
     入站第一个被执行的是inbound1，出站第一个被执行的是outbound5
@@ -71,3 +73,5 @@ ChannelHandlerContext
 5. 缓存ChannelHandlerContext的引用供稍后使用，
 6. 在多个ChannelPipeline中安装同一个ChannelHandler的常见原因是收集跨多个Channel的统计信息。
 
+
+ServerBootstrap, Bootstrap, EventLoopGroup, EventLoop, Channel, ChannelPipeline, ChannelHandler, ChannelHandlerContext 时什么关系？

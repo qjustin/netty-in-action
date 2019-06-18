@@ -1,8 +1,10 @@
 package com.network.netty.chapter06.demo01;
 
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
+import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 
 public class LifeCycleChannelInboundHandler implements ChannelInboundHandler {
@@ -19,6 +21,7 @@ public class LifeCycleChannelInboundHandler implements ChannelInboundHandler {
     @Override
     public void channelActive(ChannelHandlerContext channelHandlerContext) throws Exception {
         System.out.println("channelActive:当Channel处于活动状态时被调用;Channel已经连接/绑定并且已经就绪");
+        channelHandlerContext.writeAndFlush(Unpooled.copiedBuffer("hello\r\n", CharsetUtil.UTF_8));
     }
 
     @Override

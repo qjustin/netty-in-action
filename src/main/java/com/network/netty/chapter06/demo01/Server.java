@@ -23,8 +23,9 @@ public class Server {
                     .childHandler(new ChannelInitializer<Channel>() {
                         @Override
                         protected void initChannel(Channel channel) throws Exception {
-                            channel.pipeline().addLast("LifeCycle", new LifeCycleChannelInboundHandler());
+                            channel.pipeline().addLast("InboundLifeCycle", new LifeCycleChannelInboundHandler());
                             channel.pipeline().addLast("DiscradHandler", new DiscardHandler());
+                            channel.pipeline().addLast("OutboundLifeCycle", new LifeCycleChannelOutboundHandler());
                         }
                     });
             ChannelFuture future = serverBootstrap.bind().sync();
