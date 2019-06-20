@@ -28,21 +28,27 @@ ChannelPipeline
 
 ChannelHandlerContext
 
-10. ChannelHandlerContext的很多方法在Channel和ChannelPipeline也有。区别在于：
-如果：Channel和ChannelPipeline调用这些方法，他们将沿着整个ChannelPipeline进行转播，而ChannelHandlerContext上调用，从从当前的Handler开始
-传递给下一个能处理该事件的Handler。
-        channel.write() & ctx.pipeline().write() & ctx.write() 的区别
+10.牢记：ChannelHandlerContext的很多方法在Channel和ChannelPipeline也有。区别在于：
+    如果：Channel和ChannelPipeline调用这些方法，他们将沿着整个ChannelPipeline进行转播，
+    而ChannelHandlerContext上调用，从从当前的Handler开始传递给下一个能处理该事件的Handler。
+    因此：ChannelHandlerContext产生的事件流更短，充分利用这个特性来获得最大性能。
 
-11. 牢记：
-    ChannelHandlerContext与ChannelHandler 之间的绑定永远无法改变，所以缓存对它的引用是安全的。
-    ChannelHandlerContext产生的事件流更短，充分利用这个特性来获得最大性能。
+    channel.write() & ctx.pipeline().write() & ctx.write() 的区别
 
-12. 从ChannelHandlerContext获取的channel上调用write方法会导致事件从尾端流经整个pipeline
-        channel.write()
-    从ChannelHandlerContext获取pipeline上调用write方法也会导致事件从尾端流经整个pipeline
-        ctx.pipeline().write()
+    channel,pipeline 上产生得事件流，会贯穿整个pipeline
+    context 上产生的事件，只会流入下一个handler
+
     channel.write() 和 ctx.pipeline().write() 在ChannelHandler事件级别上相同，事件从一个ChannelHandler
     到下一个ChannelHandler的移动是由ChannelHandlerContext上的调用完成
+
+    在channelRegistered 方法里调用 分别执行以下方法:
+    ctx.fireChannelRegistered();
+    ctx.pipeline().fireChannelRegistered();
+
+remove. 11,
+
+12. ChannelHandlerContext与ChannelHandler 之间的绑定永远无法改变，所以缓存对它的引用是安全的。
+
 
 13. 通过ChannelHandlerContex上的pipeline()方法获得ChannelPipeline的引用，然后获得pipeline包含的handler，来进行复杂的设计。（实现动态协议切换）
 
@@ -72,6 +78,5 @@ ChannelHandlerContext
 4. 注意 channel.write() &  ctx.pipeline().write() 的区别
 5. 缓存ChannelHandlerContext的引用供稍后使用，
 6. 在多个ChannelPipeline中安装同一个ChannelHandler的常见原因是收集跨多个Channel的统计信息。
-
 
 ServerBootstrap, Bootstrap, EventLoopGroup, EventLoop, Channel, ChannelPipeline, ChannelHandler, ChannelHandlerContext 时什么关系？
