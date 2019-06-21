@@ -1,9 +1,8 @@
-package com.network.netty.chapter08.demo02;
+package com.network.netty.chapter08.demo03;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -24,23 +23,20 @@ public class ProxyServer {
                         @Override
                         protected void initChannel(Channel channel) throws Exception {
                             channel.pipeline().addLast(
-                                    new SimpleChannelInboundHandler<ByteBuf>() {
+                                    new ChannelInboundHandlerAdapter() {
                                         ChannelFuture future;
 
                                         @Override
-                                        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                        public void channelActive(ChannelHandlerContext context) throws Exception {
                                             Bootstrap b = new Bootstrap();
                                             b.channel(NioSocketChannel.class)
-                                                    .handler(new SimpleChannelInboundHandler<ByteBuf>() {
+                                                    .handler(new ChannelInboundHandlerAdapter() {
                                                         @Override
-                                                        protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-                                                            // 为什么要先调用retain()? 不调用的话就会报错为什么？
-                                                            byteBuf.retain();
-                                                            // 发送数据给Client
-                                                            ctx.writeAndFlush(byteBuf);
+                                                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                                            context.writeAndFlush(msg);
                                                         }
                                                     });
-                                            b.group(ctx.channel().eventLoop());
+                                            b.group(context.channel().eventLoop());
                                             future = b.connect("localhost", 1128);
                                             future.addListener(new ChannelFutureListener() {
                                                 @Override
@@ -56,12 +52,10 @@ public class ProxyServer {
                                         }
 
                                         @Override
-                                        protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
+                                        public void channelRead(ChannelHandlerContext context, Object msg) throws Exception {
                                             if (future.isDone()) {
-                                                // 为什么要先调用retain()? 不调用的话就会报错为什么？
-                                                byteBuf.retain();
                                                 // 发送数据给DataServer
-                                                future.channel().writeAndFlush(byteBuf);
+                                                future.channel().writeAndFlush(msg);
                                             }
                                         }
                                     });

@@ -1,15 +1,12 @@
-package com.network.netty.chapter08.demo02;
+package com.network.netty.chapter08.demo04;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
-import io.netty.util.ReferenceCountUtil;
 
 public class ProxyServer {
     public static void main(String[] args) {
@@ -34,8 +31,7 @@ public class ProxyServer {
                                                     .handler(new SimpleChannelInboundHandler<ByteBuf>() {
                                                         @Override
                                                         protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-                                                            // 为什么要先调用retain()? 不调用的话就会报错为什么？
-                                                            byteBuf.retain();
+                                                            // byteBuf.retain();
                                                             // 发送数据给Client
                                                             ctx.writeAndFlush(byteBuf);
                                                         }
@@ -59,7 +55,7 @@ public class ProxyServer {
                                         protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
                                             if (future.isDone()) {
                                                 // 为什么要先调用retain()? 不调用的话就会报错为什么？
-                                                byteBuf.retain();
+                                                // byteBuf.retain();
                                                 // 发送数据给DataServer
                                                 future.channel().writeAndFlush(byteBuf);
                                             }

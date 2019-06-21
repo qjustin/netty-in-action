@@ -1,4 +1,4 @@
-package com.network.netty.chapter08.demo02;
+package com.network.netty.chapter08.demo03;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -7,6 +7,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
 
 public class DataServer {
     public static void main(String[] args) {
@@ -19,11 +20,11 @@ public class DataServer {
                     .childHandler(new ChannelInitializer<Channel>() {
                         @Override
                         protected void initChannel(Channel channel) throws Exception {
-                            channel.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
+                            channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                                 @Override
-                                protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-                                    System.out.println("DataServer Receive data:" + byteBuf.toString(CharsetUtil.UTF_8));
-                                    channelHandlerContext.writeAndFlush(Unpooled.copiedBuffer("Data:{'age':'18', 'name':'justin'}\r\n", CharsetUtil.UTF_8));
+                                public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                    System.out.println("DataServer Receive data:" + ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
+                                    ctx.writeAndFlush(Unpooled.copiedBuffer("Data:{'age':'18', 'name':'justin'}\r\n", CharsetUtil.UTF_8));
                                 }
                             });
                         }
