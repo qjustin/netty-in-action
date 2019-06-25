@@ -8,6 +8,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.CharsetUtil;
 
+import java.util.concurrent.TimeUnit;
+
+
 public class Client {
     public static void main(String[] args) {
         Bootstrap boot = new Bootstrap();
@@ -21,7 +24,11 @@ public class Client {
                             socketChannel.pipeline().addLast(new ChannelInboundHandlerAdapter(){
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    ctx.writeAndFlush(Unpooled.copiedBuffer("hello\r\n", CharsetUtil.UTF_8)).addListener(ChannelFutureListener.CLOSE);
+//                                    ctx.writeAndFlush(Unpooled.copiedBuffer("hello\r\n", CharsetUtil.UTF_8));
+
+                                    ctx.channel().eventLoop().scheduleAtFixedRate(() ->{
+                                        ctx.channel().writeAndFlush(Unpooled.copiedBuffer("hello\r\n", CharsetUtil.UTF_8));
+                                    }, 5, 5, TimeUnit.SECONDS);
                                 }
                             });
                         }
