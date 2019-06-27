@@ -1,4 +1,4 @@
-package com.network.netty.chapter00.test03;
+package com.network.netty.chapter00.test02;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

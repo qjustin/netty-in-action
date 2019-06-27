@@ -1,4 +1,4 @@
-package com.network.netty.chapter00.test02.v02;
+package com.network.netty.chapter00.test01.v02;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -7,7 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class Client {
-    private static final String SERVER_HOST = "127.0.0.1";
+    private static final String SERVER_HOST = "192.168.6.201";
 
     public static void main(String[] args)   {
         final int beginPort = 8000;

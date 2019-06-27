@@ -1,4 +1,4 @@
-package com.network.netty.chapter00.test01;
+package com.network.netty.chapter00.test01.v01;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -16,7 +16,9 @@ import io.netty.util.concurrent.GenericFutureListener;
  */
 public class Server {
     public static void main(String[] args) {
-        int beginPort = 10000;
+        // 服务器监听起始端口
+        int beginPort = 8000;
+        // 服务器监听端口数量
         int nPort = 200;
 
         System.out.println("server starting....");
@@ -33,7 +35,7 @@ public class Server {
         try {
             for (int i = 0; i < nPort; i++) {
                 int port = beginPort + i;
-                // 要同步执行 .sync()
+                // 要同步执行 .sync() 服务器启动慢一点也无所谓
                 ChannelFuture channelFuture = bootstrap.bind(port).sync();
                 channelFutures[i] = channelFuture;
                 channelFutures[i].addListener(new GenericFutureListener<Future<? super Void>>() {
