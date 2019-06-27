@@ -1,53 +1,82 @@
 package com.network.netty.chapter00.test01;
 
+import com.network.netty.chapter00.test04.ClientHandlerInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
-// https://www.jianshu.com/p/490e2981545c
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * java -Xmx3100m -Xms3100m -jar iotest.one-jar.jar
+ */
 public class Client {
     public static void main(String[] args) {
-        final ByteBuf byteBuf = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("Client connected to server", CharsetUtil.UTF_8));
+        // 服务器监听起始端口
+        int beginPort = 8000;
+        // 服务器监听端口数量
+        int nPort = 200;
 
-        Bootstrap boot = new Bootstrap();
-        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup g = new NioEventLoopGroup();
         try {
-            boot.group(group)
+            Bootstrap b = new Bootstrap();
+            b.group(g)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.SO_REUSEADDR, true)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel channel) throws Exception {
-                        }
-                    });
+                    .handler(new ClientHandlerInitializer());
 
-           for(int i = 0; i < 10000; i++) {
-
+            for (int i = 0, j = 0; i < 50000; i++, j++) {
                 try {
-                    ChannelFuture channelFuture = boot.connect("localhost", 1127);
-                    channelFuture.addListener((ChannelFutureListener) future -> {
-                        if (!future.isSuccess()) {
-                            System.out.println("连接失败, 退出!");
-                            System.exit(0);
-                        }
-                    });
-                    channelFuture.get();
-                } catch (Exception e) {
-
+                    ChannelFuture future = b.connect("192.168.141.103", 8000 + (j % nPort));
+                    if (j % nPort == 0) {
+                        future.addListener(new ChannelFutureListener() {
+                            @Override
+                            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                                if (channelFuture.isSuccess()) {
+                                    channelFuture.channel().eventLoop().scheduleAtFixedRate(new SendTimer(channelFuture), 5, 5, TimeUnit.SECONDS);
+                                }
+                            }
+                        });
+                    }
+//                    future.get();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
                 }
             }
+            Thread.sleep(1000000000L);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {
             try {
-                group.shutdownGracefully().sync();
+                g.shutdownGracefully().sync();
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
+        }
+    }
+
+    static final class SendTimer implements Runnable {
+        static ByteBuf byteBuf = Unpooled.buffer(1024);
+        ChannelFuture future;
+
+        static {
+            for (int i = 0; i < byteBuf.capacity(); i++) {
+                byteBuf.writeByte((byte) i);
+            }
+        }
+
+        public SendTimer(ChannelFuture future) {
+            this.future = future;
+        }
+
+        public void run() {
+            future.channel().writeAndFlush(byteBuf.retain());
         }
     }
 }

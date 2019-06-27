@@ -1,4 +1,4 @@
-package com.network.netty.chapter00.test03;
+package com.network.netty.chapter00.test02.v03;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;

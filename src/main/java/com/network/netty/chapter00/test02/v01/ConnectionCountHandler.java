@@ -1,4 +1,4 @@
-package com.network.netty.chapter00.test03;
+package com.network.netty.chapter00.test02.v01;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;

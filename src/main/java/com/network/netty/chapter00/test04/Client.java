@@ -1,13 +1,14 @@
-package com.network.netty.example.demo02;
+package com.network.netty.chapter00.test04;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,26 +28,11 @@ public class Client {
             b.group(g)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.SO_REUSEADDR, true)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel channel) throws Exception {
-                            channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
-                                @Override
-                                public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    System.out.println("连接成功, Channel.id:" + ctx.channel().id());
-                                }
-
-                                @Override
-                                public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                    System.out.println("收到消息, Channel.id:" + ctx.channel().id() + ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
-                                }
-                            });
-                        }
-                    });
+                    .handler(new ClientHandlerInitializer());
 
             for (int i = 0, j = 0; i < 50000; i++, j++) {
                 try {
-                    ChannelFuture future = b.connect("192.168.6.201", 8000 + (j % nPort));
+                    ChannelFuture future = b.connect("192.168.141.103", 8000 + (j % nPort));
                     if (j % nPort == 0) {
                         future.addListener(new ChannelFutureListener() {
                             @Override

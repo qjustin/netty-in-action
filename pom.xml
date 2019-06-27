@@ -78,7 +78,7 @@
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
 <!--              <mainClass>com.network.netty.chapter00.test03.Client</mainClass>-->
-              <mainClass>com.network.netty.example.demo02.Server</mainClass>
+              <mainClass>com.network.netty.chapter00.test01.Server</mainClass>
             </manifest>
           </archive>
         </configuration>
