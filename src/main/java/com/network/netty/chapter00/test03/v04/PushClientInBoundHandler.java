@@ -17,8 +17,8 @@ public class PushClientInBoundHandler extends SimpleChannelInboundHandler<String
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
 
             ctx.writeAndFlush("hello world all guys current thread id:" + Thread.currentThread().getId() + " / message id: " + id.getAndIncrement() + "\r\n");
-
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+            System.out.println("Send message to server, threadId:" + Thread.currentThread().getId() + " / message id: " + id.get() + "\r\n");
+        }, 0, 100, TimeUnit.MILLISECONDS);
     }
 
     @Override

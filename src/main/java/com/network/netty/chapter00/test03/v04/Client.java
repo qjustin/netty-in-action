@@ -34,7 +34,7 @@ public class Client {
                 }
             });
 
-            for (int i = 0; i < 500000; i++) {
+            for (int i = 0; i < 100000; i++) {
                 int port = BEGIN_PORT + (i % N_PORT);
 
                 try {
