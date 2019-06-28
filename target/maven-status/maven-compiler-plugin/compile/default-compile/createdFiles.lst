@@ -15,6 +15,7 @@ com\network\netty\chapter07\ScheduleExamples.class
 com\network\netty\chapter06\demo01\Client$1$1.class
 com\network\netty\chapter11\demo03\WebSocketConvertHandler$1.class
 com\network\netty\chapter00\test03\v01\Server.class
+com\network\netty\chapter00\test03\v04\ServerInboundHandler$1.class
 com\network\netty\chapter05\demo01\Server$1$1.class
 com\network\netty\chapter04\demo01\PlainOioServer.class
 com\network\netty\chapter04\demo01\NettyOioServer$1$1.class
