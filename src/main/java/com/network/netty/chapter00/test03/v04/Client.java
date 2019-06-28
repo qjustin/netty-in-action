@@ -13,7 +13,7 @@ import static com.network.netty.chapter00.test03.v03.Constants.N_PORT;
 
 public class Client {
     private static final ClientInBoundHandler clientInboundHandler = new ClientInBoundHandler();
-    private static final String SERVER_HOST = "192.168.141.104";
+
 
     public static void main(String[] args) {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -38,7 +38,7 @@ public class Client {
                 int port = BEGIN_PORT + (i % N_PORT);
 
                 try {
-                    ChannelFuture future = boot.connect(SERVER_HOST, port).addListener(
+                    ChannelFuture future = boot.connect(Constants.SERVER_HOST, port).addListener(
                             new ChannelFutureListener() {
                                 @Override
                                 public void operationComplete(ChannelFuture channelFuture) throws Exception {

@@ -79,7 +79,7 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <!--              <mainClass>com.network.netty.chapter00.test03.v02.Server</mainClass>-->
                             <!--              <mainClass>com.network.netty.chapter00.test01.v01.Client</mainClass>-->
-                            <mainClass>com.network.netty.chapter00.test03.v04.Server</mainClass>
+                            <mainClass>com.network.netty.chapter00.test03.v04.Client</mainClass>
 
                         </manifest>
                     </archive>
