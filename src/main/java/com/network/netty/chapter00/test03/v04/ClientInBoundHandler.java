@@ -8,6 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class ClientInBoundHandler extends SimpleChannelInboundHandler<String> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-        System.out.println(s);
+        // 不打印直接丢弃掉
+        // System.out.println(s);
     }
 }
