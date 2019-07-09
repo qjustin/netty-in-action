@@ -9,12 +9,12 @@ public class App {
         try {
 
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+           ex.printStackTrace();
         } finally {
             try {
 
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                ex.printStackTrace();
             }
         }
     }
