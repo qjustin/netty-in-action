@@ -7,7 +7,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.Date;
 
-public class TimeServer extends ChannelInboundHandlerAdapter {
+public class TimeServerHandler extends ChannelInboundHandlerAdapter {
     private int counter;
 
     @Override
